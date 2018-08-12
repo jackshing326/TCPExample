@@ -1,0 +1,7 @@
+D:\NTNUProgram\DllObject\IndyTCP\bin\Debug\IndyTCP.dll
+D:\NTNUProgram\DllObject\IndyTCP\bin\Debug\IndyTCP.pdb
+D:\NTNUProgram\DllObject\IndyTCP\bin\Debug\LogWriter.dll
+D:\NTNUProgram\DllObject\IndyTCP\bin\Debug\LogWriter.pdb
+D:\NTNUProgram\DllObject\IndyTCP\obj\Debug\IndyTCP.dll
+D:\NTNUProgram\DllObject\IndyTCP\obj\Debug\IndyTCP.pdb
+D:\NTNUProgram\DllObject\IndyTCP\obj\Debug\IndyTCP.csprojResolveAssemblyReference.cache

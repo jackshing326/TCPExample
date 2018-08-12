@@ -1,0 +1,359 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using LogWriter_Obj;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Drawing.Imaging;
+using System.Drawing;
+
+namespace IndyTCP
+{
+    public class IndyClient
+    {
+
+        private int _Port;
+        public int Port
+        {
+            get { return _Port; }
+            set { _Port = value; }
+        }
+
+        private string _IP;
+        public string IP
+        {
+            get { return _IP; }
+            set { _IP = value; }
+        }
+
+        System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
+        NetworkStream serverStream;
+        LogWriter Log = new LogWriter();
+        int _ThreadSleepTime = 1000;
+        int buffersize = 1024;
+
+        public void Dispose()
+        {
+            if (clientSocket.Client.Connected)
+            {
+                clientSocket.Client.Disconnect(true);
+                clientSocket.Close();
+            }
+        }
+
+        public bool IsConnect()
+        {
+            if (clientSocket.Connected)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public bool Send_Indy(string data)
+        {
+            // Convert the string data to byte data using ASCII encoding.
+            // Clinet送過去ㄉ資料不用前面加四碼長度計算 ,只需要後面加上\r\n
+            // 但從Server 收到資料會有前面4個byte是計算長度 
+
+
+            clientSocket = new TcpClient();
+            clientSocket.Client.Connect(_IP, _Port);
+
+
+
+            NetworkStream serverStream;
+            try
+            {
+                if (clientSocket.Connected)
+                {
+
+                    byte[] byteData = System.Text.Encoding.ASCII.GetBytes(data + "\r\n");
+                    serverStream = clientSocket.GetStream();
+                    serverStream.Write(byteData, 0, byteData.Length);
+
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriterLog("Send_Indy data:" + data);
+                Log.WriterLog("Send_Indy ex:" + ex.ToString());
+                return false;
+            }
+        }
+
+        public bool Receive_Indy(ref string ReturnString)
+        {
+            // Convert the string data to byte data using ASCII encoding.
+            try
+            {
+                if (clientSocket.Connected)
+                {
+
+                    int bytesRead = 0;
+                    int loop = 0;
+                    int howMany = 0;
+                    byte[] buffer = new byte[buffersize];
+                    MemoryStream ms = new MemoryStream();
+
+
+                    using (NetworkStream clientStream = clientSocket.GetStream())
+                    {
+
+                        // Wait for data to begin coming in for up to 20 secs
+
+                        while (!clientStream.DataAvailable && loop < 2000)
+                        {
+                            loop++;
+                            Thread.Sleep(_ThreadSleepTime);
+                        }
+
+                        // Keep reading until nothing comes for over 1 sec
+                        while (clientStream.DataAvailable)
+                        {
+
+                            // Keep reading until nothing comes for over 1 sec
+                            do
+                            {
+                                howMany = clientStream.Read(buffer, bytesRead, buffer.Length);
+                                ms.Write(buffer, bytesRead, buffer.Length);
+                            }
+                            while (howMany > 0 && clientStream.DataAvailable);
+                            byte[] buffer2 = new byte[ms.Length - 4];
+                            Buffer.BlockCopy(ms.ToArray(), 4, buffer2, 0, buffer2.Length);
+                            ReturnString = System.Text.Encoding.Default.GetString(buffer2, 0, buffer2.Length);
+                            //去除空白,需要用特別的方法
+                            ReturnString = Regex.Replace(ReturnString, @"[^\u0009^\u000A^\u000D^\u0020-\u007E]", "");
+                            ReturnString = ReturnString.Replace("\r", "").Replace("\n", "");
+
+                        }
+                        //clientStream.Close();
+                        clientSocket.Client.Disconnect(true);
+
+
+                    }
+
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriterLog("Receive_Indy ex:" + ex.ToString());
+                clientSocket.Client.Disconnect(true);
+
+                return false;
+            }
+        }
+
+        public bool Receive_DirectionIndy(ref string ReturnString)
+        {
+            // Convert the string data to byte data using ASCII encoding.
+            try
+            {
+
+                if (!clientSocket.Connected)
+                {
+                    clientSocket = new TcpClient();
+                    clientSocket.Client.Connect(_IP, _Port);
+                }
+
+                if (clientSocket.Connected)
+                {
+                    int bytesRead = 0;
+                    int loop = 0;
+                    int howMany = 0;
+                    byte[] buffer = new byte[buffersize];
+                    MemoryStream ms = new MemoryStream();
+
+
+                    using (NetworkStream clientStream = clientSocket.GetStream())
+                    {
+
+                        // Wait for data to begin coming in for up to 20 secs
+
+                        while (!clientStream.DataAvailable && loop < 2000)
+                        {
+                            loop++;
+                            Thread.Sleep(_ThreadSleepTime);
+                        }
+
+                        // Keep reading until nothing comes for over 1 sec
+                        while (clientStream.DataAvailable)
+                        {
+
+                            // Keep reading until nothing comes for over 1 sec
+                            do
+                            {
+                                howMany = clientStream.Read(buffer, bytesRead, buffer.Length);
+                                ms.Write(buffer, bytesRead, buffer.Length);
+
+                            }
+                            while (howMany > 0 && clientStream.DataAvailable);
+                            byte[] buffer2 = new byte[ms.Length - 4];
+                            Buffer.BlockCopy(ms.ToArray(), 4, buffer2, 0, buffer2.Length);
+                            ReturnString = System.Text.Encoding.Default.GetString(buffer2, 0, buffer2.Length);
+                        }
+                        clientSocket.Client.Disconnect(true);
+
+                    }
+
+                    return true;
+                }
+
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.WriterLog("Receive_Indy ex:" + ex.ToString());
+                clientSocket.Client.Disconnect(true);
+
+                return false;
+            }
+        }
+
+        public bool Receive_IndyByteArray_Pic(ref byte[] ReturnByte)
+        {
+            try
+            {
+
+
+                if (clientSocket.Connected)
+                {
+                    int bytesRead = 0;
+                    int loop = 0;
+                    int howMany = 0;
+                    byte[] buffer = new byte[32468];
+                    MemoryStream ms = new MemoryStream();
+
+                    using (NetworkStream clientStream = clientSocket.GetStream())
+                    {
+
+
+                        // Wait for data to begin coming in for up to 20 secs
+
+                        while (!clientStream.DataAvailable && loop < 2000)
+                        {
+                            loop++;
+                            Thread.Sleep(_ThreadSleepTime);
+                        }
+
+                        // Keep reading until nothing comes for over 1 sec
+                        while (clientStream.DataAvailable)
+                        {
+                            do
+                            {
+                                howMany = clientStream.Read(buffer, bytesRead, buffer.Length);
+                                ms.Write(buffer, bytesRead, buffer.Length);
+
+
+                            }
+                            while (howMany > 0 && clientStream.DataAvailable);
+
+                            byte[] buffer2 = new byte[ms.Length - 4];
+
+                            Buffer.BlockCopy(ms.ToArray(), 4, buffer2, 0, buffer2.Length);
+                            ReturnByte = buffer2;
+                        }
+
+                        clientSocket.Client.Disconnect(true);
+
+
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.WriterLog("Receive_Indy ex:" + ex.ToString());
+                clientSocket.Client.Disconnect(true);
+
+                return false;
+            }
+        }
+
+        public Image ByteToImage(byte[] blob, int Height, int Width)
+        {
+            try
+            {
+                Image image = Image.FromStream(new MemoryStream(blob));
+                Size size = new System.Drawing.Size(Width, Height);
+                image = (Image)(new Bitmap(image, size));
+                return image;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool SendACK()
+        {
+
+            string SendMsg = "ACK";
+
+            bool IsSuccess = false;
+            try
+            {
+
+                if (!clientSocket.Connected)
+                {
+                    clientSocket = new TcpClient();
+                    clientSocket.Client.Connect(_IP, _Port);
+                }
+
+
+                if (clientSocket.Connected)
+                {
+
+                    byte[] byteData = System.Text.Encoding.ASCII.GetBytes(SendMsg + "\r\n");
+                    serverStream = clientSocket.GetStream();
+                    serverStream.Write(byteData, 0, byteData.Length);
+                    clientSocket.Client.Disconnect(true);
+                    clientSocket.Close();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                clientSocket.Client.Disconnect(true);
+                return IsSuccess;
+            }
+
+            return true;
+        }
+    }
+}

@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerForm", "ServerForm\ServerForm.csproj", "{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndyTCP", "..\..\..\..\NTNUProgram\DllObject\IndyTCP\IndyTCP.csproj", "{6D1938CE-65B1-44BF-852E-3BAE7E732337}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogWriter", "..\..\..\..\NTNUProgram\DllObject\LogWriter\LogWriter\LogWriter\LogWriter.csproj", "{994DCD75-129C-4D5E-93D6-F2ED73A468E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSSQLClass", "..\..\..\..\NTNUProgram\DllObject\MSSQLClass\MSSQLClass\MSSQLClass.csproj", "{13EE4490-570C-4606-8A54-1E0ACB3216D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93DC3E52-585D-40B1-A0EF-96ECB8E9DE8A}.Release|x64.ActiveCfg = Release|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D1938CE-65B1-44BF-852E-3BAE7E732337}.Release|x64.ActiveCfg = Release|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{994DCD75-129C-4D5E-93D6-F2ED73A468E8}.Release|x64.ActiveCfg = Release|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13EE4490-570C-4606-8A54-1E0ACB3216D6}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
